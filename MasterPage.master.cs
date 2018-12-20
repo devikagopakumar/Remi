@@ -26,22 +26,44 @@ public partial class MasterPage : System.Web.UI.MasterPage
    
     protected void Button4_Click(object sender, EventArgs e)
     {
-        TextBox3.Text = DropDownList1.Text + ":" + DropDownList2.Text + " " + DropDownList3.Text;
+        if (DropDownList1.Text == "SELECT" || DropDownList2.Text == "SELECT" || DropDownList3.Text == "SELECT")
+        {
+            Response.Write("<script> alert('Select All') </script>");
+        }
+        else
+        {
+            TextBox3.Text = DropDownList1.Text + ":" + DropDownList2.Text + " " + DropDownList3.Text;
+        }
     }
     protected void Button1_Click(object sender, EventArgs e)
     {
         string s = "insert into reminder values('"+TextBox1.Text+"','"+TextBox3.Text+"','"+TextBox2.Text+"')";
-        Response.Write("<script> alert('Reminder Is Setted Properly')");
         db.insert(s);
+        Response.Write("<script> alert('Reminder Is Setted Properly')");
     }
     protected void Button2_Click(object sender, EventArgs e)
     {
         string s12 = "update reminder set reminder_date='"+TextBox1.Text.ToString()+"'";
         db.update(s12);
+        Response.Write("<script> alert('Reminder Is Updated Properly')");
     }
     protected void Button3_Click(object sender, EventArgs e)
     {
         string s00 = "delete from reminder where reminder_date='" + TextBox1.Text.ToString() + "' ";
         db.delete(s00);
+        Response.Write("<script> alert('Reminder Is Deleted Properly')");
+    }
+    protected void Button5_Click(object sender, EventArgs e)
+    {
+        string s11 = "select reminder_time,reminder_events from reminder where reminder_date='"+TextBox1.Text+"'";
+       SqlDataReader dr;
+       dr = db.select(s11);
+       while (dr.Read())
+       {
+           TextBox2.Text = dr.GetValue(0).ToString();
+           TextBox3.Text = dr.GetValue(1).ToString();
+       }
+
+       dr.Close();
     }
 }
